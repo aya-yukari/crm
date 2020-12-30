@@ -21,5 +21,8 @@
 
         }
         })
+        
+        String createTime = DateTimeUtil.getSysTime();
+        String createBy = ((User)request.getSession().getAttribute("user")).getName();
     </body>
 </html>

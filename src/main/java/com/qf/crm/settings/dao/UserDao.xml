@@ -6,9 +6,7 @@
 <mapper namespace="com.qf.crm.settings.dao.UserDao">
 
     <select id="getUserList" resultType="User">
-
         select * from tbl_user
-
     </select>
 
     <select id="login" resultType="User">

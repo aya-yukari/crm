@@ -8,6 +8,7 @@ import com.qf.crm.utils.DateTimeUtil;
 import com.qf.crm.utils.SqlSessionUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,6 +55,12 @@ public class UserServiceImpl implements UserService {
         }
         
         return user;
+    }
+
+    public List<User> getUserList() {
+        
+        List<User> uList = userDao.getUserList();
+        return uList;
     }
 }
 

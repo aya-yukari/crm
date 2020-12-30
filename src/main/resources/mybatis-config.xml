@@ -9,6 +9,7 @@
   <typeAliases>
   
   	<package name="com.qf.crm.settings.domain"/>
+  	<package name="com.qf.crm.workbench.domain"/>
   	
   
   </typeAliases>
@@ -29,6 +30,7 @@
   <mappers>
    
       <package name="com.qf.crm.settings.dao"/>
+      <package name="com.qf.crm.workbench.dao"/>
     
     
   </mappers>

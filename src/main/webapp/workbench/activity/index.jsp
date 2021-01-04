@@ -195,10 +195,100 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			if($xz.length==0){
 				
 				alert("请选择需要删除的记录");
+				
+			//肯定选了，而且有可能是1条，有可能是多条	
 			}else{
 				
-				alert(123);
+				if(confirm("确定删除所选中的记录吗?")){
+
+					//url: workbench/activity/delete.do?id=xxx&id=xxx&id=xx
+
+					//拼接参数
+					var param="";
+
+					//将$xz中的每一个dom对象遍历出来，取其value值，就相当于取得了需要删除的记录的id
+					for(var i=0;i<$xz.length;i++){
+
+						param += "id="+$($xz[i]).val();
+
+						//如果不是最后一个元素，需要在后面追加一个&符
+						if(i<$xz.length-1){
+
+							param += "&";
+						}
+					}
+
+					//alert(param);
+					$.ajax({
+						url: "workbench/activity/delete.do",
+						data: param,
+						type: "post",
+						dataType: "json",
+						success: function (data) {
+
+							/*
+                                data 
+                                    {"success":true/false}
+                             */
+							if(data.success){
+
+								//删除成功后
+								pageList(1,2);
+							}else{
+								alert("删除市场活动失败");
+							}
+						}
+					})
+					
+				}
+				
+				
+				
 			}
+		})
+		
+		//为修改按钮绑定事件，打开修改操作的模态窗口
+		$("#editBtn").click(function () {
+			
+			var $xz = $("input[name=xz]:checked");
+			
+			if($xz.length==0){
+				
+				alert("请选择需要修改的记录");
+				
+			}else if($xz.length>1){
+				
+				alert("只能选择一条记录进行修改");
+				
+			//肯定只选了一条	
+			}else{
+				
+				var id = $xz.val();
+
+				$.ajax({
+					url: "workbench/activity/getUserListAndActivity.do",
+					data: {
+						//通过id查数据，所以往后台传id
+						"id": id
+						
+					},
+					type: "",
+					dataType: "json",
+					success: function (data) {
+
+						/* 
+							data
+								用户列表
+								市场活动对象
+								
+								{"uList":[{用户1}],{2},{3}]}
+						 */
+						
+					}
+				})
+				
+			}
+			
 		})
 		
 		
@@ -222,6 +312,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		
 	 */
 	function pageList(pageNo,pageSize){
+		
+		//将全选的复选框的√干掉
+		$("#qx").prop("checked",false);
 		
 		//查询前，将隐藏域中保存的信息取出来，重新赋予到搜索框中
 		$("#search-name").val($.trim($("#hidden-name").val()));
@@ -497,7 +590,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						
 					-->
 				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
-				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
+				  <button type="button" class="btn btn-default" id="editBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				

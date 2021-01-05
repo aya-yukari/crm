@@ -1,5 +1,7 @@
 package com.qf.crm.workbench.service.impl;
 
+import com.qf.crm.settings.dao.UserDao;
+import com.qf.crm.settings.domain.User;
 import com.qf.crm.utils.SqlSessionUtil;
 import com.qf.crm.vo.PaginationVO;
 import com.qf.crm.workbench.dao.ActivityDao;
@@ -7,6 +9,7 @@ import com.qf.crm.workbench.dao.ActivityRemarkDao;
 import com.qf.crm.workbench.domain.Activity;
 import com.qf.crm.workbench.service.ActivityService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +24,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     private ActivityDao activityDao = SqlSessionUtil.getSqlSession().getMapper(ActivityDao.class);
     private ActivityRemarkDao activityRemarkDao = SqlSessionUtil.getSqlSession().getMapper(ActivityRemarkDao.class);
+    private UserDao userDao = SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
 
     public boolean save(Activity a) {
 
@@ -74,5 +78,44 @@ public class ActivityServiceImpl implements ActivityService {
         }
         
         return flag;
+    }
+
+    public Map<String, Object> getUserListAndActivity(String id) {
+        
+        //取uList
+        List<User> uList = userDao.getUserList();
+        
+        //取a
+        Activity a = activityDao.getById(id);
+        
+        //将uList和a打包到map中
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("uList",uList);
+        map.put("a",a);
+        
+        //返回map就可以了
+        
+        return map;
+    }
+
+    public boolean update(Activity a) {
+
+        boolean flag = true;
+
+        int count = activityDao.update(a);
+        if(count!=1){
+
+            flag = false;
+
+        }
+
+        return flag;
+    }
+
+    public Activity detail(String id) {
+        
+        Activity a = activityDao.detail(id);
+        
+        return a;
     }
 }
